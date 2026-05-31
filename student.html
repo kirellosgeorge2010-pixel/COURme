@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>COURme — Student Portal</title>
+  <!-- Security check -->
+  <script>
+    if (sessionStorage.getItem('courme_role') !== 'student') {
+      window.location.href = 'index.html';
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="app-container">
+    <!-- Desktop Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-icon">C</div>
+        <span class="logo-text">COUR<span>me</span></span>
+      </div>
+      <div class="sidebar-badge student-badge">
+        <i data-lucide="graduation-cap"></i> Student Mode
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#" class="nav-link active">
+              <i data-lucide="list-todo" class="icon-sm"></i>
+              <span>Homework Tracker</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" id="nav-btn-resources">
+              <i data-lucide="book-open" class="icon-sm"></i>
+              <span>Study Resources</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="avatar" id="user-avatar">SR</div>
+          <div class="user-info">
+            <span class="user-name" id="user-display-name">Loading...</span>
+            <span class="user-role">Student</span>
+          </div>
+          <button id="logout-btn" class="btn btn-icon btn-secondary" title="Log Out" style="margin-left: auto; width: 34px; height: 34px;">
+            <i data-lucide="log-out"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile sticky top bar (visible on phones only) -->
+    <div class="mobile-topbar" id="mobile-topbar">
+      <span class="logo-text">COUR<span>me</span></span>
+      <div class="mobile-nav-row">
+        <div class="mobile-avatar" id="mobile-avatar-display">SR</div>
+        <button class="mobile-logout-btn" id="mobile-logout-btn" title="Log Out">
+          <i data-lucide="log-out" style="width:18px;height:18px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-header">
+        <div class="header-left">
+          <h1 id="page-title">Welcome back!</h1>
+          <p class="text-muted">Here is your course activity.</p>
+        </div>
+        <div class="header-right">
+          <div class="date-pill">
+            <i data-lucide="calendar" class="icon-sm"></i>
+            <span id="current-date">Sunday, May 31</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-body">
+        <!-- Stats row -->
+        <div class="stats-grid">
+          <div class="stat-card glass-card">
+            <div class="stat-icon-wrapper purple">
+              <i data-lucide="check-square"></i>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Homework Completed</span>
+              <h3 class="stat-value" id="student-completed-count">0/0</h3>
+              <div class="progress-bar-container">
+                <div class="progress-bar" id="student-hw-progress" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon-wrapper emerald">
+              <i data-lucide="folder-open"></i>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Available Resources</span>
+              <h3 class="stat-value" id="student-resources-count">0</h3>
+              <span class="stat-desc text-muted">Latest lecture assets posted</span>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon-wrapper amber">
+              <i data-lucide="award"></i>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Attendance Rate</span>
+              <h3 class="stat-value">100%</h3>
+              <span class="stat-desc text-muted">High engagement score</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two-column dashboard -->
+        <div class="dashboard-grid">
+          <!-- Homework Panel -->
+          <div class="glass-card panel-card">
+            <div class="panel-header">
+              <div class="panel-header-title">
+                <i data-lucide="list-todo" class="accent-purple"></i>
+                <h2>My Homework Tracker</h2>
+              </div>
+              <div class="filter-pills" id="student-hw-filters">
+                <button class="pill active" data-filter="all">All</button>
+                <button class="pill" data-filter="pending">Pending</button>
+                <button class="pill" data-filter="completed">Done</button>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="search-box">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" id="student-hw-search" placeholder="Search assignments...">
+              </div>
+              <div class="todo-list" id="student-hw-list"></div>
+            </div>
+          </div>
+
+          <!-- Resources Panel -->
+          <div class="glass-card panel-card">
+            <div class="panel-header">
+              <div class="panel-header-title">
+                <i data-lucide="book-open" class="accent-emerald"></i>
+                <h2>Teacher Resources</h2>
+              </div>
+              <div class="filter-pills" id="student-res-filters">
+                <button class="pill active" data-filter="all">All</button>
+                <button class="pill" data-filter="lectures">Lectures</button>
+                <button class="pill" data-filter="handouts">Handouts</button>
+                <button class="pill" data-filter="links">Links</button>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="search-box">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" id="student-res-search" placeholder="Search resources...">
+              </div>
+              <div class="resources-list" id="student-res-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Floating Chat Widget -->
+  <button class="chat-fab" id="chat-fab" title="Open Class Chat">
+    <i data-lucide="message-square" class="chat-fab-icon"></i>
+    <i data-lucide="x" class="chat-fab-close"></i>
+  </button>
+
+  <div class="chat-widget-panel" id="chat-widget-panel">
+    <div class="chat-widget-header">
+      <div class="chat-widget-title">
+        <span class="chat-status-dot"></span>
+        Class Chatroom
+      </div>
+      <span class="chat-widget-header-count" id="chat-widget-count">0 messages</span>
+    </div>
+    <div class="chat-widget-messages" id="chat-widget-messages"></div>
+    <div class="chat-widget-footer">
+      <input type="text" id="chat-widget-input" placeholder="Type a message..." autocomplete="off">
+      <button class="chat-send-btn" id="chat-widget-send"><i data-lucide="send"></i></button>
+    </div>
+  </div>
+
+  <!-- Submission Modal -->
+  <div class="modal-overlay d-none" id="submission-modal">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <h3 id="modal-hw-title">Submit Homework</h3>
+        <button class="btn btn-icon btn-secondary" id="close-modal-btn">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="hw-submit-form" class="dashboard-form">
+          <input type="hidden" id="submit-hw-id">
+          <div class="form-group">
+            <label for="submission-text">Submission Notes & Solution Links</label>
+            <textarea id="submission-text" rows="5" required placeholder="Type your answers, explanation, or paste your GitHub/Repl.it URL here..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-success btn-full">
+            <i data-lucide="upload-cloud"></i> Submit Assignment
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

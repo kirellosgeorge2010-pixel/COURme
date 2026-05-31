@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>COURme — Teacher Console</title>
+  <script>
+    if (sessionStorage.getItem('courme_role') !== 'teacher') {
+      window.location.href = 'index.html';
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="app-container">
+    <!-- Desktop Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-icon">C</div>
+        <span class="logo-text">COUR<span>me</span></span>
+      </div>
+      <div class="sidebar-badge teacher-badge">
+        <i data-lucide="user-cog"></i> Teacher Console
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#" class="nav-link active">
+              <i data-lucide="file-plus-2" class="icon-sm"></i>
+              <span>Assign Homework</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link">
+              <i data-lucide="share-2" class="icon-sm"></i>
+              <span>Publish Resources</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="avatar" id="user-avatar">TJ</div>
+          <div class="user-info">
+            <span class="user-name" id="user-display-name">Dr. Daniel hany</span>
+            <span class="user-role">Teacher</span>
+          </div>
+          <button id="logout-btn" class="btn btn-icon btn-secondary" title="Log Out" style="margin-left: auto; width: 34px; height: 34px;">
+            <i data-lucide="log-out"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile sticky top bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+      <span class="logo-text">COUR<span>me</span></span>
+      <div class="mobile-nav-row">
+        <div class="mobile-avatar" id="mobile-avatar-display">TJ</div>
+        <button class="mobile-logout-btn" id="mobile-logout-btn" title="Log Out">
+          <i data-lucide="log-out" style="width:18px;height:18px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-header">
+        <div class="header-left">
+          <h1 id="page-title">Teacher Console</h1>
+          <p class="text-muted">Manage assignments, share resources, and review submissions.</p>
+        </div>
+        <div class="header-right">
+          <div class="date-pill">
+            <i data-lucide="calendar" class="icon-sm"></i>
+            <span id="current-date">Sunday, May 31</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-body">
+        <!-- Stats row -->
+        <div class="stats-grid">
+          <div class="stat-card glass-card">
+            <div class="stat-icon-wrapper purple">
+              <i data-lucide="file-plus-2"></i>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Assignments Assigned</span>
+              <h3 class="stat-value" id="teacher-assigned-count">0</h3>
+              <span class="stat-desc text-muted">Across Web Dev & Robotics</span>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon-wrapper emerald">
+              <i data-lucide="share-2"></i>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Resources Shared</span>
+              <h3 class="stat-value" id="teacher-shared-count">0</h3>
+              <span class="stat-desc text-muted">Files & learning assets</span>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon-wrapper blue">
+              <i data-lucide="users"></i>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Class Students</span>
+              <h3 class="stat-value">34</h3>
+              <span class="stat-desc text-muted">Active participants</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two-column grid: forms + reviewer -->
+        <div class="dashboard-grid">
+          <!-- Forms Column -->
+          <div class="forms-column">
+            <div class="glass-card panel-card">
+              <div class="panel-header">
+                <div class="panel-header-title">
+                  <i data-lucide="plus-circle" class="accent-purple"></i>
+                  <h2>Assign New Homework</h2>
+                </div>
+              </div>
+              <div class="panel-body">
+                <form id="add-homework-form" class="dashboard-form">
+                  <div class="form-group">
+                    <label for="hw-title">Homework Title</label>
+                    <input type="text" id="hw-title" required placeholder="e.g. Flexbox Layout Grid Sheet">
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="hw-subject">Subject</label>
+                      <select id="hw-subject">
+                        <option value="Web Development">💻 Web Development</option>
+                        <option value="Robotics">🤖 Robotics</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="hw-due">Due Date</label>
+                      <input type="date" id="hw-due" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="hw-desc">Instructions</label>
+                    <textarea id="hw-desc" rows="3" required placeholder="Describe the task requirements..."></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-full">
+                    <i data-lucide="plus"></i> Assign to Class
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <div class="glass-card panel-card margin-top-md">
+              <div class="panel-header">
+                <div class="panel-header-title">
+                  <i data-lucide="plus-circle" class="accent-emerald"></i>
+                  <h2>Upload Resource Link</h2>
+                </div>
+              </div>
+              <div class="panel-body">
+                <form id="add-resource-form" class="dashboard-form">
+                  <div class="form-group">
+                    <label for="res-title">Resource Title</label>
+                    <input type="text" id="res-title" required placeholder="e.g. Servo Motor Wiring Guide">
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="res-type">Category</label>
+                      <select id="res-type">
+                        <option value="lectures">📖 Lecture Slides</option>
+                        <option value="handouts">📝 Handouts</option>
+                        <option value="links">🔗 Useful Links</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="res-link">Link URL</label>
+                      <input type="text" id="res-link" required placeholder="https://...">
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-success btn-full">
+                    <i data-lucide="share"></i> Publish Resource
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reviewer Panel -->
+          <div class="glass-card panel-card">
+            <div class="panel-header">
+              <div class="panel-header-title">
+                <i data-lucide="sliders" class="accent-blue"></i>
+                <h2>Workspace Reviewer</h2>
+              </div>
+              <div class="filter-pills" id="teacher-content-tabs">
+                <button class="pill active" data-tab="homework">Homework</button>
+                <button class="pill" data-tab="resources">Resources</button>
+                <button class="pill" data-tab="submissions">Submissions</button>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div id="teacher-homework-tab-content" class="tab-content active">
+                <div class="item-manager-list" id="teacher-homework-list"></div>
+              </div>
+              <div id="teacher-resources-tab-content" class="tab-content">
+                <div class="item-manager-list" id="teacher-resources-list"></div>
+              </div>
+              <div id="teacher-submissions-tab-content" class="tab-content">
+                <div class="item-manager-list" id="teacher-submissions-list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Floating Chat Widget -->
+  <button class="chat-fab" id="chat-fab" title="Open Class Chat">
+    <i data-lucide="message-square" class="chat-fab-icon"></i>
+    <i data-lucide="x" class="chat-fab-close"></i>
+  </button>
+
+  <div class="chat-widget-panel" id="chat-widget-panel">
+    <div class="chat-widget-header">
+      <div class="chat-widget-title">
+        <span class="chat-status-dot"></span>
+        Class Chatroom
+      </div>
+      <span class="chat-widget-header-count" id="chat-widget-count">0 messages</span>
+    </div>
+    <div class="chat-widget-messages" id="chat-widget-messages"></div>
+    <div class="chat-widget-footer">
+      <input type="text" id="chat-widget-input" placeholder="Type a message..." autocomplete="off">
+      <button class="chat-send-btn" id="chat-widget-send"><i data-lucide="send"></i></button>
+    </div>
+  </div>
+
+  <!-- Grade Review Modal -->
+  <div class="modal-overlay d-none" id="review-modal">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <h3>Grade Submission</h3>
+        <button class="btn btn-icon btn-secondary" id="close-review-modal-btn">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom: 20px; padding: 14px; background: rgba(16,54,125,0.04); border-radius: 8px;">
+          <p><strong>Student:</strong> <span id="review-student-name">...</span></p>
+          <p><strong>Homework:</strong> <span id="review-hw-title">...</span></p>
+          <p style="margin-top: 8px;"><strong>Solution:</strong></p>
+          <p id="review-solution-text" style="white-space: pre-wrap; font-size: 13px; color: var(--text-secondary); margin-top: 4px; padding: 8px; background: rgba(16,54,125,0.03); border-radius: 6px;"></p>
+        </div>
+        <form id="submission-grade-form" class="dashboard-form">
+          <input type="hidden" id="review-sub-id">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="review-grade">Grade</label>
+              <select id="review-grade">
+                <option value="A+">A+</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="Needs Revision">Needs Revision</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="review-feedback">Feedback Notes</label>
+            <textarea id="review-feedback" rows="3" required placeholder="Type feedback..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-success btn-full">
+            <i data-lucide="check"></i> Submit Grade & Feedback
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

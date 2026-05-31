@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>COURme — Manager Portal</title>
+  <script>
+    if (sessionStorage.getItem('courme_role') !== 'manager') {
+      window.location.href = 'index.html';
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="app-container">
+    <!-- Desktop Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-icon">C</div>
+        <span class="logo-text">COUR<span>me</span></span>
+      </div>
+      <div class="sidebar-badge manager-badge">
+        <i data-lucide="briefcase"></i> Manager Portal
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#" class="nav-link active">
+              <i data-lucide="bar-chart-3" class="icon-sm"></i>
+              <span>School Analytics</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" id="nav-btn-audit">
+              <i data-lucide="history" class="icon-sm"></i>
+              <span>System Audit Log</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="avatar" id="user-avatar">KG</div>
+          <div class="user-info">
+            <span class="user-name" id="user-display-name">Kirellos George</span>
+            <span class="user-role">Manager</span>
+          </div>
+          <button id="logout-btn" class="btn btn-icon btn-secondary" title="Log Out" style="margin-left: auto; width: 34px; height: 34px;">
+            <i data-lucide="log-out"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile sticky top bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+      <span class="logo-text">COUR<span>me</span></span>
+      <div class="mobile-nav-row">
+        <div class="mobile-avatar" id="mobile-avatar-display">KG</div>
+        <button class="mobile-logout-btn" id="mobile-logout-btn" title="Log Out">
+          <i data-lucide="log-out" style="width:18px;height:18px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-header">
+        <div class="header-left">
+          <h1 id="page-title">Manager Portal</h1>
+          <p class="text-muted">Institutional metrics, teacher outputs, and homework compliance.</p>
+        </div>
+        <div class="header-right">
+          <div class="date-pill">
+            <i data-lucide="calendar" class="icon-sm"></i>
+            <span id="current-date">Sunday, May 31</span>
+          </div>
+          <button id="reset-db-btn" class="btn btn-icon btn-secondary" title="Reset Default Data">
+            <i data-lucide="rotate-ccw"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="dashboard-body">
+        <!-- Stats row -->
+        <div class="stats-grid">
+          <div class="stat-card glass-card">
+            <div class="stat-icon-wrapper purple">
+              <i data-lucide="landmark"></i>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Total Assigned Items</span>
+              <h3 class="stat-value" id="ceo-total-assignments">0</h3>
+              <span class="stat-desc text-muted">Across Web Dev & Robotics</span>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon-wrapper emerald">
+              <i data-lucide="pie-chart"></i>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Platform Completion</span>
+              <h3 class="stat-value" id="ceo-avg-completion">0%</h3>
+              <div class="progress-bar-container">
+                <div class="progress-bar" id="ceo-completion-progress" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon-wrapper blue">
+              <i data-lucide="activity"></i>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Total Logs Recorded</span>
+              <h3 class="stat-value" id="ceo-logs-count">0</h3>
+              <span class="stat-desc text-muted">Live event logs</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two-column grid: analytics + audit -->
+        <div class="dashboard-grid">
+          <!-- Analytics Panel -->
+          <div class="glass-card panel-card">
+            <div class="panel-header">
+              <div class="panel-header-title">
+                <i data-lucide="bar-chart-3" class="accent-purple"></i>
+                <h2>Platform Analytics</h2>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="chart-container">
+                <span class="chart-title">Homework Completion by Subject</span>
+                <div class="bar-chart" id="ceo-subject-bar-chart"></div>
+              </div>
+              <div class="chart-legend">
+                <span class="legend-item"><span class="legend-color purple-grad"></span> Completion %</span>
+              </div>
+
+              <div class="divider" style="margin: 24px 0; height: 1px; background: var(--glass-border);"></div>
+
+              <div class="submissions-monitor">
+                <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                  <i data-lucide="clipboard-check" class="accent-emerald icon-sm"></i> Student Submissions Monitor
+                </h3>
+                <div class="item-manager-list" id="ceo-submissions-list" style="max-height: 200px; overflow-y: auto;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Audit Log Panel -->
+          <div class="glass-card panel-card" id="audit-log-section">
+            <div class="panel-header">
+              <div class="panel-header-title">
+                <i data-lucide="history" class="accent-emerald"></i>
+                <h2>Operations Audit Log</h2>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                <select id="audit-severity-filter" class="role-select" style="padding: 6px 12px; font-size: 11px; width: 110px;">
+                  <option value="ALL">All Levels</option>
+                  <option value="SUCCESS">Success</option>
+                  <option value="WARNING">Warning</option>
+                  <option value="SECURITY">Security</option>
+                </select>
+                <button id="clear-logs-btn" class="btn btn-sm btn-secondary">Clear</button>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="activity-log-container" id="ceo-activity-logs" style="max-height: 480px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Floating Chat Widget (READ-ONLY for manager) -->
+  <button class="chat-fab" id="chat-fab" title="View Class Chat">
+    <i data-lucide="message-square" class="chat-fab-icon"></i>
+    <i data-lucide="x" class="chat-fab-close"></i>
+  </button>
+
+  <div class="chat-widget-panel" id="chat-widget-panel">
+    <div class="chat-widget-header">
+      <div class="chat-widget-title">
+        <span class="chat-status-dot"></span>
+        Class Chatroom Monitor
+      </div>
+      <span class="badge badge-warning" style="font-size: 9px;">READ-ONLY</span>
+    </div>
+    <div class="chat-widget-messages" id="chat-widget-messages"></div>
+    <div class="chat-widget-readonly-label">
+      <i data-lucide="eye" style="display: inline-block; vertical-align: middle; width:14px; height:14px;"></i>
+      Monitoring mode — you cannot send messages
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

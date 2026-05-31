@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COURme — Portal Entry</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+  <!-- Ambient background glow elements -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="login-container">
+    <div class="login-card glass-card">
+      <div class="login-header">
+        <div class="logo-icon">C</div>
+        <h1 class="logo-text">COUR<span>me</span></h1>
+        <p class="text-muted">Academic Management Dashboard</p>
+      </div>
+
+      <div class="portal-selector">
+        <button type="button" class="portal-tab active" data-role="student">
+          <i data-lucide="graduation-cap"></i> Student
+        </button>
+        <button type="button" class="portal-tab" data-role="teacher">
+          <i data-lucide="user-cog"></i> Teacher
+        </button>
+        <button type="button" class="portal-tab" data-role="manager">
+          <i data-lucide="briefcase"></i> Manager
+        </button>
+      </div>
+
+      <form id="login-form" class="dashboard-form">
+        <!-- Student Input -->
+        <div class="form-group" id="input-group-username">
+          <label for="login-username">Student Display Name</label>
+          <input type="text" id="login-username" placeholder="e.g. Alex Rivera" required>
+        </div>
+
+        <!-- Password Input (Hidden by default for Student, shown for Teacher/Manager) -->
+        <div class="form-group d-none" id="input-group-password">
+          <label for="login-password">Portal Passcode</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="login-password" placeholder="••••••••">
+          </div>
+        </div>
+
+        <div id="login-error" class="error-text d-none">
+          <i data-lucide="alert-circle" class="icon-sm"></i> Invalid credentials or passcode.
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full margin-top-md">
+          Access Portal <i data-lucide="arrow-right"></i>
+        </button>
+      </form>
+      
+      <div class="login-footer text-muted">
+        <p>Demo Passcodes: Teacher = <code>teacher123</code> | Manager = <code>ceo999</code></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Local page routing checks (index.html is the entry gate)
+    document.addEventListener('DOMContentLoaded', () => {
+      // If already logged in, redirect straight to their portal
+      const currentRole = sessionStorage.getItem('courme_role');
+      const user = sessionStorage.getItem('courme_user');
+      if (currentRole && user) {
+        window.location.href = `${currentRole}.html`;
+      }
+    });
+  </script>
+</body>
+</html>
